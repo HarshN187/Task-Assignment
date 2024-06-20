@@ -28,11 +28,6 @@ const EventRegistrationForm = () => {
     }
   };
 
-  const showSummary = () => {
-    // You can customize the summary display here, e.g., showing an alert or updating state
-    alert(JSON.stringify(values, null, 2));
-  };
-
   return (
     <div className="event-registration-form">
       <h2>Event Registration Form</h2>
@@ -99,18 +94,28 @@ const EventRegistrationForm = () => {
           </div>
         )}
 
-        <button type="submit" className="submit-btn">Submit</button>
+        <button type="submit" className="submit-btn">
+          Submit
+        </button>
       </form>
 
       {/* Display summary */}
       {showSummaryFlag && (
         <div className="summary">
           <h3>Registration Summary</h3>
-          <p><strong>Name:</strong> {values.name}</p>
-          <p><strong>Email:</strong> {values.email}</p>
-          <p><strong>Age:</strong> {values.age}</p>
+          <p>
+            <strong>Name:</strong> {values.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {values.email}
+          </p>
+          <p>
+            <strong>Age:</strong> {values.age}
+          </p>
           {values.attendingWithGuest && (
-            <p><strong>Guest Name:</strong> {values.guestName}</p>
+            <p>
+              <strong>Guest Name:</strong> {values.guestName}
+            </p>
           )}
         </div>
       )}
@@ -119,4 +124,3 @@ const EventRegistrationForm = () => {
 };
 
 export default EventRegistrationForm;
-
