@@ -1,22 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SurveyForm.css";
+import axios from "axios"; // Import axios for API requests
 
 const SurveyForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     surveyTopic: "",
-    favoriteProgrammingLanguage: "",
-    yearsOfExperience: "",
-    exerciseFrequency: "",
-    dietPreference: "",
-    highestQualification: "",
-    fieldOfStudy: "",
     feedback: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [additionalQuestions, setAdditionalQuestions] = useState({});
+  const [additionalQuestions, setAdditionalQuestions] = useState([]);
+  const [additionalAnswers, setAdditionalAnswers] = useState({});
   const [submittedData, setSubmittedData] = useState(null);
 
   const handleInputChange = (e) => {
@@ -27,17 +23,36 @@ const SurveyForm = () => {
     });
   };
 
+  const handleAdditionalInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdditionalAnswers({
+      ...additionalAnswers,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    // Fetch additional questions when survey topic changes
+    if (formData.surveyTopic) {
+      fetchAdditionalQuestions(formData.surveyTopic);
+    }
+  }, [formData.surveyTopic]);
+
   const fetchAdditionalQuestions = async (topic) => {
     try {
-      const response = await fetch(`/api/questions/${topic}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch questions");
-      }
-      const data = await response.json();
-      setAdditionalQuestions(data);
+      const response = await axios.get(
+        `http://localhost:5000/api/questions/${topic}`
+      );
+      setAdditionalQuestions(response.data);
+      setAdditionalAnswers(
+        response.data.reduce((acc, question) => {
+          acc[question] = "";
+          return acc;
+        }, {})
+      );
     } catch (error) {
       console.error("Error fetching additional questions:", error);
-      setAdditionalQuestions({});
+      setAdditionalQuestions([]);
     }
   };
 
@@ -50,22 +65,10 @@ const SurveyForm = () => {
       return;
     }
 
-    // Fetch additional questions based on survey topic
-    await fetchAdditionalQuestions(formData.surveyTopic);
-
     // Prepare submitted data for display
     const submittedData = {
-      fullName: formData.fullName,
-      email: formData.email,
-      surveyTopic: formData.surveyTopic,
-      favoriteProgrammingLanguage: formData.favoriteProgrammingLanguage,
-      yearsOfExperience: formData.yearsOfExperience,
-      exerciseFrequency: formData.exerciseFrequency,
-      dietPreference: formData.dietPreference,
-      highestQualification: formData.highestQualification,
-      fieldOfStudy: formData.fieldOfStudy,
-      feedback: formData.feedback,
-      additionalQuestions: additionalQuestions,
+      ...formData,
+      additionalAnswers,
     };
 
     // Display summary of entered data
@@ -88,33 +91,8 @@ const SurveyForm = () => {
     if (!data.surveyTopic) {
       errors.surveyTopic = "Survey Topic is required";
     }
-    if (data.surveyTopic === "Technology") {
-      if (!data.favoriteProgrammingLanguage) {
-        errors.favoriteProgrammingLanguage =
-          "Favorite Programming Language is required";
-      }
-      if (!data.yearsOfExperience || data.yearsOfExperience <= 0) {
-        errors.yearsOfExperience = "Years of Experience must be greater than 0";
-      }
-    } else if (data.surveyTopic === "Health") {
-      if (!data.exerciseFrequency) {
-        errors.exerciseFrequency = "Exercise Frequency is required";
-      }
-      if (!data.dietPreference) {
-        errors.dietPreference = "Diet Preference is required";
-      }
-    } else if (data.surveyTopic === "Education") {
-      if (!data.highestQualification) {
-        errors.highestQualification = "Highest Qualification is required";
-      }
-      if (!data.fieldOfStudy) {
-        errors.fieldOfStudy = "Field of Study is required";
-      }
-    }
-    if (!data.feedback || data.feedback.length < 50) {
-      errors.feedback =
-        "Feedback is required and must be at least 50 characters";
-    }
+    // Add more validations as needed
+
     return errors;
   };
 
@@ -124,8 +102,7 @@ const SurveyForm = () => {
   };
 
   return (
-    <div className="survey-form-container">
-      <h2>Survey Form</h2>
+    <div>
       {submittedData ? (
         <div className="submission-summary">
           <h3>Thank you for your submission!</h3>
@@ -140,63 +117,20 @@ const SurveyForm = () => {
             <li>
               <strong>Survey Topic:</strong> {submittedData.surveyTopic}
             </li>
-            {submittedData.surveyTopic === "Technology" && (
-              <>
-                <li>
-                  <strong>Favorite Programming Language:</strong>{" "}
-                  {submittedData.favoriteProgrammingLanguage}
+            {submittedData.additionalAnswers &&
+              Object.keys(submittedData.additionalAnswers).map((key, index) => (
+                <li key={index}>
+                  <strong>{key}:</strong> {submittedData.additionalAnswers[key]}
                 </li>
-                <li>
-                  <strong>Years of Experience:</strong>{" "}
-                  {submittedData.yearsOfExperience}
-                </li>
-              </>
-            )}
-            {submittedData.surveyTopic === "Health" && (
-              <>
-                <li>
-                  <strong>Exercise Frequency:</strong>{" "}
-                  {submittedData.exerciseFrequency}
-                </li>
-                <li>
-                  <strong>Diet Preference:</strong>{" "}
-                  {submittedData.dietPreference}
-                </li>
-              </>
-            )}
-            {submittedData.surveyTopic === "Education" && (
-              <>
-                <li>
-                  <strong>Highest Qualification:</strong>{" "}
-                  {submittedData.highestQualification}
-                </li>
-                <li>
-                  <strong>Field of Study:</strong> {submittedData.fieldOfStudy}
-                </li>
-              </>
-            )}
+              ))}
             <li>
               <strong>Feedback:</strong> {submittedData.feedback}
             </li>
           </ul>
-          {Object.keys(submittedData.additionalQuestions).length > 0 && (
-            <>
-              <h4>Additional Questions:</h4>
-              <ul>
-                {Object.keys(submittedData.additionalQuestions).map(
-                  (question) => (
-                    <li key={question}>
-                      <strong>{question}:</strong>{" "}
-                      {submittedData.additionalQuestions[question]}
-                    </li>
-                  )
-                )}
-              </ul>
-            </>
-          )}
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="survey-form">
+          <h2>Advanced Survey Form</h2>
           <div className="form-group">
             <label>Full Name</label>
             <input
@@ -236,104 +170,18 @@ const SurveyForm = () => {
             )}
           </div>
 
-          {formData.surveyTopic === "Technology" && (
-            <div className="form-group">
-              <label>Favorite Programming Language</label>
-              <select
-                name="favoriteProgrammingLanguage"
-                value={formData.favoriteProgrammingLanguage}
-                onChange={handleInputChange}
-              >
-                <option value="">Select language</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
-                <option value="C#">C#</option>
-              </select>
-              {errors.favoriteProgrammingLanguage && (
-                <div className="error">
-                  {errors.favoriteProgrammingLanguage}
-                </div>
-              )}
-
-              <label>Years of Experience</label>
-              <input
-                type="number"
-                name="yearsOfExperience"
-                value={formData.yearsOfExperience}
-                onChange={handleInputChange}
-              />
-              {errors.yearsOfExperience && (
-                <div className="error">{errors.yearsOfExperience}</div>
-              )}
-            </div>
-          )}
-
-          {formData.surveyTopic === "Health" && (
-            <div className="form-group">
-              <label>Exercise Frequency</label>
-              <select
-                name="exerciseFrequency"
-                value={formData.exerciseFrequency}
-                onChange={handleInputChange}
-              >
-                <option value="">Select frequency</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Monthly">Monthly</option>
-                <option value="Rarely">Rarely</option>
-              </select>
-              {errors.exerciseFrequency && (
-                <div className="error">{errors.exerciseFrequency}</div>
-              )}
-
-              <label>Diet Preference</label>
-              <select
-                name="dietPreference"
-                value={formData.dietPreference}
-                onChange={handleInputChange}
-              >
-                <option value="">Select preference</option>
-                <option value="Vegetarian">Vegetarian</option>
-                <option value="Vegan">Vegan</option>
-                <option value="Non-Vegetarian">Non-Vegetarian</option>
-              </select>
-              {errors.dietPreference && (
-                <div className="error">{errors.dietPreference}</div>
-              )}
-            </div>
-          )}
-
-          {formData.surveyTopic === "Education" && (
-            <div className="form-group">
-              <label>Highest Qualification</label>
-              <select
-                name="highestQualification"
-                value={formData.highestQualification}
-                onChange={handleInputChange}
-              >
-                <option value="">Select qualification</option>
-                <option value="High School">High School</option>
-                <option value="Bachelor's">Bachelor's</option>
-                <option value="Master's">Master's</option>
-                <option value="PhD">PhD</option>
-              </select>
-              {errors.highestQualification && (
-                <div className="error">{errors.highestQualification}</div>
-              )}
-
-              <label>Field of Study</label>
-              <input
-                type="text"
-                name="fieldOfStudy"
-                value={formData.fieldOfStudy}
-                onChange={handleInputChange}
-              />
-              {errors.fieldOfStudy && (
-                <div className="error">{errors.fieldOfStudy}</div>
-              )}
-            </div>
-          )}
+          {additionalQuestions.length > 0 &&
+            additionalQuestions.map((question, index) => (
+              <div key={index} className="form-group">
+                <label>{question}</label>
+                <input
+                  type="text"
+                  name={question}
+                  value={additionalAnswers[question]}
+                  onChange={handleAdditionalInputChange}
+                />
+              </div>
+            ))}
 
           <div className="form-group">
             <label>Feedback</label>

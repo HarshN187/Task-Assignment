@@ -1,75 +1,87 @@
 .event-registration-form {
-  max-width: 600px;
-  margin: auto;
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
+  background-color: #f4f4f4;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f9f9f9;
+}
+
+.App {
+  margin-top: 50px;
 }
 
 .event-registration-form h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
 }
 
-.event-registration-form form {
-  display: flex;
-  flex-direction: column;
-}
-
-.event-registration-form form div {
+.form-group {
   margin-bottom: 15px;
 }
 
-.event-registration-form form label {
-  font-weight: bold;
+.form-group label {
+  display: block;
   margin-bottom: 5px;
 }
 
-.event-registration-form form input[type="text"],
-.event-registration-form form input[type="email"],
-.event-registration-form form input[type="number"],
-.event-registration-form form textarea,
-.event-registration-form form select {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="checkbox"] {
   width: 100%;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-.event-registration-form form input[type="checkbox"] {
-  margin-right: 10px;
+.form-group input[type="checkbox"] {
+  width: auto;
 }
 
-.event-registration-form form button {
-  padding: 10px 20px;
+.input-error {
+  border-color: red;
+}
+
+.error {
+  color: red; /* Changed to red for validation errors */
+  margin-top: 5px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
   font-size: 16px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.event-registration-form form button:hover {
+.submit-btn:hover {
   background-color: #45a049;
 }
 
-.event-registration-form .summary {
+.summary {
   margin-top: 20px;
   padding: 10px;
-  border: 1px solid #ccc;
+  background-color: #e0f7fa;
+  border: 1px solid #b2ebf2;
   border-radius: 5px;
-  background-color: #fff;
 }
 
-.event-registration-form .summary h3 {
+.summary h3 {
   margin-top: 0;
-  color: #333;
+  font-size: 20px;
+  text-align: center;
 }
 
-.event-registration-form .summary p {
+.summary p {
   margin-bottom: 10px;
+}
+
+.summary strong {
+  font-weight: bold;
 }

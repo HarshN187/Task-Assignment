@@ -1,0 +1,15 @@
+{
+    "Technology": [
+      "What IDE do you prefer?",
+      "How comfortable are you with version control?"
+    ],
+    "Health": [
+      "What is your typical exercise routine?",
+      "What dietary restrictions do you have?"
+    ],
+    "Education": [
+      "What was your favorite subject in school?",
+      "How did your education influence your career?"
+    ]
+  }
+  

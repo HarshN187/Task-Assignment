@@ -53,13 +53,14 @@ body {
 }
 
 .survey-form button {
-  padding: 10px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .survey-form button:hover {
