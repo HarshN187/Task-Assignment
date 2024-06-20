@@ -1,59 +1,75 @@
-/* App.css */
-
-.App {
-  font-family: Arial, sans-serif;
+.event-registration-form {
   max-width: 600px;
-  margin: 0 auto;
-  padding: 2em;
+  margin: auto;
+  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
 }
 
-form {
+.event-registration-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.event-registration-form form {
   display: flex;
   flex-direction: column;
 }
 
-div {
-  margin-bottom: 1em;
+.event-registration-form form div {
+  margin-bottom: 15px;
 }
 
-label {
-  margin-bottom: 0.5em;
+.event-registration-form form label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="checkbox"] {
-  padding: 0.5em;
-  font-size: 1em;
+.event-registration-form form input[type="text"],
+.event-registration-form form input[type="email"],
+.event-registration-form form input[type="number"],
+.event-registration-form form textarea,
+.event-registration-form form select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
 
-input[type="checkbox"] {
-  width: auto;
+.event-registration-form form input[type="checkbox"] {
+  margin-right: 10px;
 }
 
-button {
-  padding: 0.7em;
-  font-size: 1em;
-  color: white;
+.event-registration-form form button {
+  padding: 10px 20px;
+  font-size: 16px;
   background-color: #007bff;
+  color: #fff;
   border: none;
   border-radius: 3px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.event-registration-form form button:hover {
+  background-color: #45a049;
 }
 
-p {
-  color: red;
-  margin: 0;
-  font-size: 0.9em;
+.event-registration-form .summary {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.event-registration-form .summary h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.event-registration-form .summary p {
+  margin-bottom: 10px;
 }
