@@ -41,7 +41,7 @@ const SurveyForm = () => {
   const fetchAdditionalQuestions = async (topic) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/questions/${topic}`
+        `https://task-assignment-2.onrender.com/api/questions/${topic}`
       );
       setAdditionalQuestions(response.data);
       setAdditionalAnswers(
